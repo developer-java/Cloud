@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="#{facesContext.externalContext.requestContextPath}/template/root.xhtml">
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{redirectModel.redirect()}"/>
+    </ui:define>
+    <ui:define name="styles">
+        <link href="res/css/mystyle.css"/>
+        <link href="res/css/bootstrap.css"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+
+        </h:form>
+    </ui:define>
+    <ui:define name="scripts">
+    </ui:define>
+</ui:composition>

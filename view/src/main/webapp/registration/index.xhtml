@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                template="#{facesContext.externalContext.requestContextPath}/template/root.xhtml">
+
+    <ui:define name="content">
+        <h:form id="mainForm">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="col-lg-4 col-lg-offset-4">
+                        <p>
+                            <center>
+                                <h2 class="reg_title">Зарегистрируйтесь</h2>
+                            </center>
+                        </p>
+                        <p>
+                            <label class="text_label">Введите логин</label>
+                            <rich:message for="login" ajaxRendered="true"/>
+                            <h:inputText id="login" value="#{registrationModel.user.login}" required="true" immediate="true" styleClass="form-control"/>
+                        </p>
+                        <p>
+                            <label class="text_label">Введите имя</label>
+                            <rich:message for="name" ajaxRendered="true"/>
+                            <h:inputText required="true" id="name" value="#{registrationModel.user.firstname}" styleClass="form-control"/>
+                        </p>
+                        <p>
+                            <label class="text_label">фамилия</label>
+                            <rich:message for="lastname" ajaxRendered="true"/>
+                            <h:inputText id="lastname" required="true" value="#{registrationModel.user.lastname}" styleClass="form-control"/>
+                        </p>
+                        <p>
+                            <label class="text_label">Введите электроная почта</label>
+                            <rich:message for="email" ajaxRendered="true"/>
+                            <h:inputText id="email" required="true" value="#{registrationModel.user.email}" styleClass="form-control"/>
+                        </p>
+                        <p>
+                            <label class="text_label">Введите страну</label>
+                            <a4j:region>
+                                <h:selectOneMenu id="pp-coutry" value="#{registrationModel.selectedContry}" styleClass="form-control" required="true">
+                                    <f:selectItem itemLabel="Ваша страна" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{registrationModel.contry}" var="contry"
+                                                   itemLabel="#{contry.valueRu}" itemValue="#{contry}"/>
+                                    <f:converter binding="#{dictionaryModel.converter}"/>
+                                    <f:attribute name="dicType" value="DIC_CONTRY" />
+                                    <a4j:ajax event="change" listener="#{registrationModel.listenerContry()}" render="cityPanel" execute="@region"/>
+                                </h:selectOneMenu>
+                                <rich:message for="pp-coutry" ajaxRendered="true"/>
+                            </a4j:region>
+                        </p>
+                        <p>
+                            <label class="text_label">Введите город</label>
+                            <rich:message for="pp-city" ajaxRendered="true"/>
+                            <a4j:outputPanel id="cityPanel">
+                                <h:selectOneMenu id="pp-city" value="#{registrationModel.selectedCity}" styleClass="form-control" required="true">
+                                    <f:selectItem itemLabel="Ваш город" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{registrationModel.cityByContry}" var="city"
+                                                   itemLabel="#{city.valueRu}" itemValue="#{city}"/>
+                                    <f:converter binding="#{dictionaryModel.converter}"/>
+                                    <f:attribute name="dicType" value="DIC_CITY" />
+                                </h:selectOneMenu>
+                                <rich:message for="pp-city" ajaxRendered="true"/>
+                            </a4j:outputPanel>
+
+                        </p>
+                        <p>
+                            <label class="text_label">Введите пароль</label>
+                            <rich:message for="pass" ajaxRendered="true"/>
+                            <h:inputSecret value="#{registrationModel.user.password}" id="pass" required="true" styleClass="form-control"/>
+                        </p>
+
+                        <p>
+                            <a class="btn btn-success" onclick="goNext(); return false;">Зарегистрироваться</a>
+                            <a4j:jsFunction name="goNext" action="#{registrationModel.registration()}" execute="@form"/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+    <ui:define name="scripts">
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,34 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <div id="fileSizeErrorAlert" class="modal fade" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h:outputText style="font-size: 14px; color: red; font-weight: bold;" value="Не достаточно места"/>
+                </div>
+                <div class="modal-footer">
+                    <a4j:commandButton oncomplete="hideFileSizeErrorAlert();" action="#{applicationModel.setFileSizeError(false)}" value="Закрыть" styleClass="btn btn-warning"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#fileSizeErrorAlert').modal({
+                backdrop: 'static',
+                show: false
+            });
+        });
+        function showFileSizeErrorAlert() {
+            $('#fileSizeErrorAlert').modal('show');
+        }
+
+        function hideFileSizeErrorAlert() {
+            $('#fileSizeErrorAlert').modal('hide');
+        }
+    </script>
+</ui:composition>

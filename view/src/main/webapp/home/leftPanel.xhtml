@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <h:form id="leftPanelForm">
+        <a4j:outputPanel id="leftPanel" ajaxRendered="true" styleClass="leftPanel">
+            <div class="container">
+                <div class="row">
+                    <div style="width: 100%; position: absolute; padding-left: 32px; padding-top: 5px; padding-right: 5px;">
+                        <a href="#"><div onclick="hideLeftPanel();" style="padding: 16px;float: right; color: #000; font-size: 16px; padding: 15px; background-image: url(#{facesContext.externalContext.requestContextPath}/res/img/close.png); background-size: 100% 100%;"></div></a>
+                        <img src="#{applicationModel.getImagePath(applicationModel.selectedFile)}" alt="" style="margin-top: 50px" width="150px" height="150px"/>
+                        <h1>#{applicationModel.selectedFile.fileName}</h1>
+                        <h4>Формат файла: #{applicationModel.selectedFile.fileFormat}</h4>
+                        <h4>Размер файла: #{applicationModel.selectedFile.getFileSize()}</h4>
+                        <h4>Дата создание: #{applicationModel.selectedFile.createdTime}</h4>
+                        <h4>Ссылка на файл: <a>http://localhost:8080/download?uid=#{applicationModel.getUidByPath(applicationModel.selectedFile.file.path)}</a></h4>
+                        <a4j:commandButton type="button" class="btn btn-success" onclick="$('#download').click();" value="Скачать"/>
+                        <a4j:commandButton styleClass="btn btn-warning" action="#{applicationModel.deleteSelectedFile(applicationModel.selectedFile.file)}" render="filesPanel" oncomplete="hideLeftPanel();" value="Удалить"/>
+                    </div>
+                </div>
+            </div>
+        </a4j:outputPanel>
+    </h:form>
+    <a4j:outputPanel id="downloadForm" ajaxRendered="true" style="display: none;">
+        <form method="get" action="#{facesContext.externalContext.requestContextPath}/download" target="_blank" style="display: none;">
+            <input type="text" name="uid" value="#{applicationModel.getUidByPath(applicationModel.selectedFile.file.path)}"/>
+            <input type="submit" id="download"/>
+        </form>
+    </a4j:outputPanel>
+    <script>
+        var showing = false;
+        function showLeftPanel() {
+            $(".leftPanel").animate({
+                "left":"0"
+            },1000);
+        }
+        function hideLeftPanel() {
+            $(".leftPanel").animate({
+                "left":"-100%"
+            },1000);
+        }
+    </script>
+</ui:composition>

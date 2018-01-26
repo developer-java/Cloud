@@ -1,0 +1,108 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                template="#{facesContext.externalContext.requestContextPath}/template/root.xhtml">
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{redirectModel.goToMainPage}"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="main">
+            <script>
+                function fPanelShow() {
+                    $("#createFolder").show(1100);
+                }
+                function fPanelHide() {
+                    if (#{!applicationModel.hasError}){
+                        $("#createFolder").hide(1100);
+                    }
+                }
+            </script>
+            <div class="container">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                            <div class="left-menu shadow">
+                                <div class="dick">
+                                    <a4j:outputPanel ajaxRendered="true" id="fileSizePanel">
+                                        <center>
+                                            <p><span class="dick_title">Размер всех файлов: #{applicationModel.getSize(true)}</span><hr/></p>
+                                            <p><span class="dick_title">Свободно место: #{applicationModel.getSize(false)}</span><hr/></p>
+                                            <p><span class="dick_title">Ваш тариф: #{parentUserModule.parentUser.type == 'FULL' ? '100Mb' : '1000Mb'}</span><hr/></p>
+                                        </center>
+                                    </a4j:outputPanel>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-9 col-md-8 col-sm-8 shadow">
+                            <center>
+                                <div class="" style="height: inherit">
+                                    <center><span class="font-16-black">Корзина<hr/></span></center>
+                                    <a4j:region>
+                                        <rich:message for="loadBtn" ajaxRendered="true"/>
+                                    </a4j:region>
+                                    <a4j:outputPanel ajaxRendered="true" id="filesPanel">
+                                        <ui:repeat value="#{applicationModel.getBasketFiles()}" var="file">
+                                            <ui:fragment rendered="#{file.file.file}">
+                                                <div class="fileItem" style="position: relative">
+                                                    <h:selectBooleanCheckbox value="#{file.selected}" style="position: absolute; top: 3px; right:3px"/>
+                                                    <center>
+                                                        <!--showLeftPanel(#{file.id});-->
+                                                        <a4j:commandLink action="#{applicationModel.setSelectedFile(file)}" render="downloadForm" oncomplete="showLeftPanel();">
+                                                            <div style="width: 100px; height: 90px;">
+                                                                <img src="#{applicationModel.getImagePath(file)}" alt="IMG" width="80px" height="80px"/>
+                                                            </div>
+                                                            <div style="width: 100px; height: 20px; margin-top: 0px;">
+                                                                <p style="padding: 0;margin: 0;text-align: center">#{applicationModel.handleFileName(file.file)}</p>
+                                                            </div>
+                                                        </a4j:commandLink>
+                                                    </center>
+                                                </div>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{!file.file.file and !file.file.name.equals('basket')}">
+                                                <div class="fileItem">
+                                                    <center>
+                                                        <a4j:commandLink style="width: 100%; height: 100%" render="filesPanel downloadForm" action="#{applicationModel.updateCurrentPath(file.file.name)}">
+                                                            <div style="width: 100px; height: 90px;">
+                                                                <img src="#{applicationModel.getImagePath(file)}" alt="IMG" width="80px" height="80px"/>
+                                                            </div>
+                                                            <div style="width: 100px; height: 20px; margin-top: 0px;">
+                                                                #{applicationModel.handleFileName(file.file)}
+                                                            </div>
+                                                        </a4j:commandLink>
+                                                    </center>
+                                                </div>
+                                            </ui:fragment>
+                                        </ui:repeat>
+                                    </a4j:outputPanel>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+        <ui:include src="leftPanel.xhtml"/>
+    </ui:define>
+    <ui:define name="addContent">
+
+    </ui:define>
+    <ui:define name="scripts">
+        <script>
+            function showfileModalDialog() {
+                $('#fileModalDialog').show();
+            }
+            function onBlur() {
+                $('#blur').show(1000);
+            }
+            function notBlur() {
+                if (#{!applicationModel.hasError}){
+                    $('#blur').hide(1000);
+                }
+            }
+        </script>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,45 @@
+﻿<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:a4j="http://richfaces.org/a4j"
+				template="#{facesContext.externalContext.requestContextPath}/template/root.xhtml">
+	<ui:define name="metadata">
+		<f:event type="preRenderView" listener="#{redirectModel.redirect()}"/>
+	</ui:define>
+	<ui:define name="styles">
+		<link href="res/css/mystyle.css"/>
+		<link href="res/css/bootstrap.css"/>
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="mainForm">
+			<div class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-lg-9 col-md-8">
+							<div class="left_block">
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-8 col-sm-offset-2 col-xs-12">
+							<div class="right_block">
+								<center>
+									<p><label style="color: #1f1f20">Войти</label></p>
+									<p><h:inputText value="#{parentUserModule.login}" id="editLogin" style="font-size: 15px;"/></p>
+									<p><h:inputSecret value="#{parentUserModule.password}" id="editPassword" style="font-size: 15px"/></p>
+									<p><h:commandButton action="#{parentUserModule.goLogin()}" id="sign" value="Войти" styleClass="sign-btn btn btn-primary" style="font-size: 14px; color: white; font-weight: 900;"/></p>
+									<p>
+										<h:outputLink value="#{facesContext.externalContext.requestContextPath}/registration/index.xhtml">Зарегестироватся</h:outputLink>
+									</p>
+									<p><rich:message for="sign" ajaxRendered="true"/></p>
+								</center>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+	<ui:define name="scripts">
+	</ui:define>
+</ui:composition>

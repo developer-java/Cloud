@@ -1,0 +1,77 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                template="#{facesContext.externalContext.requestContextPath}/template/root.xhtml">
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{redirectModel.goToMainPage}"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="main">
+            <div class="container">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 shadow">
+                            <center>
+                                <div class="" style="height: inherit">
+                                    <center>
+                                        <span class="font-16-black">Поиск файлов: "#{applicationModel.search.unicalCode}"</span><br/>
+                                    </center>
+                                    <hr/>
+                                    <center>
+                                        <h2>
+                                            Найдено файлов: #{applicationModel.search.fillter.size()}
+                                        </h2>
+                                    </center>
+                                    <a4j:region>
+                                        <rich:message for="loadBtn" ajaxRendered="true"/>
+                                    </a4j:region>
+                                    <a4j:outputPanel ajaxRendered="true" id="filesPanel">
+                                        <ui:repeat value="#{applicationModel.search.getFillter()}" var="file">
+                                            <ui:fragment rendered="#{file.file.file}">
+                                                <div class="fileItem" style="position: relative">
+                                                    <h:selectBooleanCheckbox value="#{file.selected}" style="position: absolute; top: 3px; right:3px"/>
+                                                    <center>
+                                                        <a4j:commandLink action="#{applicationModel.setSelectedFile(file)}" render="downloadForm" oncomplete="showLeftPanel(); return false;">
+                                                            <div style="width: 100px; height: 90px;">
+                                                                <img src="#{applicationModel.getImagePath(file)}" alt="IMG" width="80px" height="80px"/>
+                                                            </div>
+                                                            <div style="width: 100px; height: 20px; margin-top: 0px;">
+                                                                <p style="padding: 0;margin: 0;text-align: center">#{applicationModel.handleFileName(file.file)}</p>
+                                                            </div>
+                                                        </a4j:commandLink>
+                                                    </center>
+                                                </div>
+                                            </ui:fragment>
+                                        </ui:repeat>
+                                    </a4j:outputPanel>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+        <ui:include src="leftPanel.xhtml"/>
+    </ui:define>
+    <ui:define name="addContent">
+
+    </ui:define>
+    <ui:define name="scripts">
+        <script>
+            function showfileModalDialog() {
+                $('#fileModalDialog').show();
+            }
+            function onBlur() {
+                $('#blur').show(1000);
+            }
+            function notBlur() {
+                if (#{!applicationModel.hasError}){
+                    $('#blur').hide(1000);
+                }
+            }
+        </script>
+    </ui:define>
+</ui:composition>
