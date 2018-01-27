@@ -4,7 +4,11 @@ import org.richfaces.event.FileUploadEvent;
 import org.richfaces.model.UploadedFile;
 import view.kz.ejb.FileManagment;
 import view.kz.ejb.SettingManagment;
+import view.kz.ejb.UserManagment;
+import view.kz.persistence.City;
+import view.kz.persistence.Contry;
 import view.kz.persistence.DicFile;
+import view.kz.persistence.SystemUser;
 import view.kz.util.Utils;
 
 import javax.ejb.EJB;
@@ -29,6 +33,8 @@ public class ApplicationModel {
     private ParentUserModule parentUserModule;
     @EJB
     private FileManagment fileManagment;
+    @EJB
+    public UserManagment managment;
     private List<String> currentPath = new ArrayList<>();
     private DicFile selectedFile;
     private List<DicFile> parentFiles;
@@ -36,11 +42,46 @@ public class ApplicationModel {
     private Search search;
     private boolean isFileSizeError;
 
+    private Setting setting;
+
+    public Setting getSetting() {
+        if(setting == null){
+            setting = new Setting(getParentUserModule().getParentUser());
+        }
+        return setting;
+    }
+
+    public void setSetting(Setting setting) {
+        this.setting = setting;
+    }
+
     public Search getSearch() {
         if(search==null){
             search = new Search();
         }
         return search;
+    }
+
+    public void rename() throws IOException {
+        String[] paths = getSelectedFile().getFile().getPath().split("\\\\");
+        String newFile = getParentUserModule().getParentUser().getParrentDir();
+        for(int i=3;i<paths.length-1;i++){
+            newFile+= paths[i]+"\\";
+        }
+        File file = new File(newFile+"/" + getSelectedFile().getFileName());
+        File oldFile = getSelectedFile().getFile();
+        if(!file.exists()){
+            file.createNewFile();
+        }
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(Files.readAllBytes(oldFile.toPath()));
+        fos.flush();
+        fos.close();
+        oldFile.delete();
+        selectedFile.setFile(file);
+        selectedFile.setPath(file.getPath());
+        selectedFile.setUid(UUID.randomUUID().toString().replace("-",""));
+        fileManagment.addFile(getSelectedFile());
     }
 
     public FileManagment getFileManagment() {
@@ -352,6 +393,95 @@ public class ApplicationModel {
 
         public void goToSearchResult() throws IOException {
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "search.xhtml?faces-redirect=true");
+        }
+    }
+
+    public class Setting{
+
+        private SystemUser user;
+        private City city;
+        private Contry contry;
+
+        private String password;
+        private String securityPass;
+
+        public Setting(SystemUser user) {
+            this.user = new SystemUser();
+            this.user.setId(user.getId());
+            this.user.setCity(user.getCity());
+            this.user.setType(user.getType());
+            this.user.setEmail(user.getEmail());
+            this.user.setFirstname(user.getFirstname());
+            this.user.setLastname(user.getLastname());
+            this.user.setLogin(user.getLogin());
+            this.user.setPassword(user.getPassword());
+            this.user.setParrentDir(user.getParrentDir());
+            this.user.setParrentDir(user.getParrentDir());
+            this.user.setUid(user.getUid());
+
+            this.city = user.getCity();
+            this.contry = user.getCity().getContry();
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public String getSecurityPass() {
+            return securityPass;
+        }
+
+        public void setSecurityPass(String securityPass) {
+            this.securityPass = securityPass;
+        }
+
+        public SystemUser getUser() {
+            return user;
+        }
+
+        public void setUser(SystemUser user) {
+            this.user = user;
+        }
+
+        public City getCity() {
+            return city;
+        }
+
+        public void setCity(City city) {
+            this.city = city;
+        }
+
+        public Contry getContry() {
+            return contry;
+        }
+
+        public void setContry(Contry contry) {
+            this.contry = contry;
+        }
+        public void save(){
+            city.setContry(contry);
+            user.setCity(city);
+            getParentUserModule().setParentUser(managment.updateUser(user));
+            FacesContext.getCurrentInstance().addMessage("main:saveinfo", new FacesMessage(FacesMessage.SEVERITY_INFO, "Данные успешно изменены!", null));
+            return;
+        }
+        public void resetPassword(){
+           if(password.length()<6){
+               FacesContext.getCurrentInstance().addMessage("mainPass:pass", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Введите минимум 6 смволов!", null));
+               return;
+           }
+           if(!password.equals(securityPass)){
+               FacesContext.getCurrentInstance().addMessage("mainPass:pass2", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Парольи не совпадают!", null));
+               return;
+           }
+           user.setPassword(password);
+           getParentUserModule().setParentUser(managment.updateUser(user));
+            FacesContext.getCurrentInstance().addMessage("mainPass:savepass", new FacesMessage(FacesMessage.SEVERITY_INFO, "Пароль успешно изменен!", null));
+            return;
         }
     }
 }

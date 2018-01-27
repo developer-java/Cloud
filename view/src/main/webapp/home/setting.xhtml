@@ -9,84 +9,98 @@
         <f:event type="preRenderView" listener="#{redirectModel.goToMainPage}"/>
     </ui:define>
     <ui:define name="content">
+        <style>
+            .container .row{
+                padding-right: 16px;
+                padding-left: 16px;
+            }
+        </style>
         <div class="container">
             <div class="row">
                 <img src=""/>
-                <div class="col-lg-8 col-lg-offset-2 shadow">
-                    <p>
-                        <center>
-                            <h2 class="reg_title">Редактировать профиль</h2>
-                        </center>
-                    </p>
-                    <p>
-                        <label class="text_label">Введите имя</label>
-                        <rich:message for="name" ajaxRendered="true"/>
-                        <h:inputText required="true" id="name" value="#{registrationModel.user.firstname}" styleClass="form-control"/>
-                    </p>
-                    <p>
-                        <label class="text_label">фамилия</label>
-                        <rich:message for="lastname" ajaxRendered="true"/>
-                        <h:inputText id="lastname" required="true" value="#{registrationModel.user.lastname}" styleClass="form-control"/>
-                    </p>
-                    <p>
-                        <label class="text_label">Введите электроная почта</label>
-                        <rich:message for="email" ajaxRendered="true"/>
-                        <h:inputText id="email" required="true" value="#{registrationModel.user.email}" styleClass="form-control"/>
-                    </p>
-                    <p>
-                        <label class="text_label">Введите страну</label>
-                        <a4j:region>
-                            <h:selectOneMenu id="pp-coutry" value="#{parentUserModule.parentUser.city.contry}" styleClass="form-control" required="true">
-                                <f:selectItems value="#{registrationModel.contry}" var="contry"
-                                               itemLabel="#{contry.valueRu}" itemValue="#{contry}"/>
-                                <f:converter binding="#{dictionaryModel.converter}"/>
-                                <f:attribute name="dicType" value="DIC_CONTRY" />
-                                <a4j:ajax event="change" listener="#{registrationModel.listenerContry()}" render="cityPanel" execute="@region"/>
-                            </h:selectOneMenu>
-                            <rich:message for="pp-coutry" ajaxRendered="true"/>
-                        </a4j:region>
-                    </p>
-                    <p>
-                        <label class="text_label">Введите город</label>
-                        <rich:message for="pp-city" ajaxRendered="true"/>
-                        <a4j:outputPanel id="cityPanel">
-                            <h:selectOneMenu id="pp-city" value="#{parentUserModule.parentUser.city}" styleClass="form-control" required="true">
-                                <f:selectItems value="#{registrationModel.getCityByCountry(parentUserModule.parentUser.city.contry.id)}" var="city"
-                                               itemLabel="#{city.valueRu}" itemValue="#{city}"/>
-                                <f:converter binding="#{dictionaryModel.converter}"/>
-                                <f:attribute name="dicType" value="DIC_CITY" />
-                            </h:selectOneMenu>
+                <h:form id="main">
+                    <a4j:outputPanel styleClass="col-lg-6 col-md-8 col-md-offset-2 col-lg-offset-3 col-sm-12 col-xs-12 col shadow">
+                        <p>
+                            <center>
+                                <h2 class="reg_title">Редактировать профиль</h2>
+                            </center>
+                        </p>
+                        <p>
+                            <label class="text_label">Введите имя</label>
+                            <rich:message for="name" ajaxRendered="true"/>
+                            <h:inputText required="true" id="name" value="#{applicationModel.setting.user.firstname}" styleClass="form-control"/>
+                        </p>
+                        <p>
+                            <label class="text_label">фамилия</label>
+                            <rich:message for="lastname" ajaxRendered="true"/>
+                            <h:inputText id="lastname" required="true" value="#{applicationModel.setting.user.lastname}" styleClass="form-control"/>
+                        </p>
+                        <p>
+                            <label class="text_label">Введите электроная почта</label>
+                            <rich:message for="email" ajaxRendered="true"/>
+                            <h:inputText id="email" required="true" value="#{applicationModel.setting.user.email}" styleClass="form-control"/>
+                        </p>
+                        <p>
+                            <label class="text_label">Введите страну</label>
+                            <a4j:region>
+                                <h:selectOneMenu id="pp-coutry" value="#{applicationModel.setting.contry}" styleClass="form-control" required="true">
+                                    <f:selectItems value="#{registrationModel.contry}" var="contry"
+                                                   itemLabel="#{contry.valueRu}" itemValue="#{contry}"/>
+                                    <f:converter binding="#{dictionaryModel.converter}"/>
+                                    <f:attribute name="dicType" value="DIC_CONTRY" />
+                                    <a4j:ajax event="change" listener="#{registrationModel.listenerContry()}" render="cityPanel" execute="@region"/>
+                                </h:selectOneMenu>
+                                <rich:message for="pp-coutry" ajaxRendered="true"/>
+                            </a4j:region>
+                        </p>
+                        <p>
+                            <label class="text_label">Введите город</label>
                             <rich:message for="pp-city" ajaxRendered="true"/>
-                        </a4j:outputPanel>
-                    </p>
-                    <p>
-                        <a class="btn btn-success">Сохранить</a>
-                        <a4j:jsFunction name="goNext" action="#{registrationModel.registration()}" execute="@form"/>
-                    </p>
-                </div>
+                            <a4j:outputPanel id="cityPanel">
+                                <h:selectOneMenu id="pp-city" value="#{applicationModel.setting.city}" styleClass="form-control" required="true">
+                                    <f:selectItems value="#{registrationModel.getCityByCountry(applicationModel.setting.contry.id)}" var="city"
+                                                   itemLabel="#{city.valueRu}" itemValue="#{city}"/>
+                                    <f:converter binding="#{dictionaryModel.converter}"/>
+                                    <f:attribute name="dicType" value="DIC_CITY" />
+                                </h:selectOneMenu>
+                                <rich:message for="pp-city" ajaxRendered="true"/>
+                            </a4j:outputPanel>
+                        </p>
+                        <p>
+                            <a class="btn btn-success" onclick="goNext(); return false;">Сохранить</a>
+                            <rich:message for="saveinfo" ajaxRendered="true"/>
+                            <h:inputText id="saveinfo" style="display: none"/>
+                            <a4j:jsFunction name="goNext" action="#{applicationModel.setting.save()}" execute="@form"/>
+                        </p>
+                    </a4j:outputPanel>
+                </h:form>
             </div>
             <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 shadow">
-                    <p>
-                        <center>
-                            <h2 class="reg_title">Редактировать безопасность</h2>
-                        </center>
-                    </p>
-                    <p>
-                        <label class="text_label">Введите пароль</label>
-                        <rich:message for="pass" ajaxRendered="true"/>
-                        <h:inputSecret value="#{registrationModel.user.password}" id="pass" required="true" styleClass="form-control"/>
-                    </p>
-                    <p>
-                        <label class="text_label">Подтаердить пароль</label>
-                        <rich:message for="pass2" ajaxRendered="true"/>
-                        <h:inputSecret value="#{registrationModel.user.password}" id="pass2" required="true" styleClass="form-control"/>
-                    </p>
-                    <p>
-                        <a class="btn btn-success">Сохранить</a>
-                        <a4j:jsFunction name="goNext" action="#{registrationModel.registration()}" execute="@form"/>
-                    </p>
-                </div>
+                <h:form id="mainPass">
+                    <a4j:outputPanel styleClass="col-lg-6 col-md-8 col-md-offset-2 col-lg-offset-3 col-sm-12 col-xs-12 col shadow">
+                        <p>
+                            <center>
+                                <h2 class="reg_title">Редактировать безопасность</h2>
+                            </center>
+                        </p>
+                        <p>
+                            <label class="text_label">Введите пароль</label>
+                            <rich:message for="pass" ajaxRendered="true"/>
+                            <h:inputSecret value="#{applicationModel.setting.password}" id="pass" required="true" styleClass="form-control"/>
+                        </p>
+                        <p>
+                            <label class="text_label">Подтаердить пароль</label>
+                            <rich:message for="pass2" ajaxRendered="true"/>
+                            <h:inputSecret value="#{applicationModel.setting.securityPass}" id="pass2" required="true" styleClass="form-control"/>
+                        </p>
+                        <p>
+                            <a class="btn btn-success" onclick="goNextPass(); return false;">Сохранить</a>
+                            <rich:message for="savepass" ajaxRendered="true"/>
+                            <h:inputText id="savepass" style="display: none"/>
+                            <a4j:jsFunction name="goNextPass" action="#{applicationModel.setting.resetPassword()}" execute="@form"/>
+                        </p>
+                    </a4j:outputPanel>
+                </h:form>
             </div>
         </div>
     </ui:define>

@@ -18,7 +18,6 @@
     <session-config>
         <session-timeout>15</session-timeout>
     </session-config>
-
     <context-param>
         <param-name>liquibase.changelog</param-name>
         <param-value>database/root.xml</param-value>
@@ -52,6 +51,5 @@
         <servlet-name>FileDownloadServlet</servlet-name>
         <url-pattern>/download</url-pattern>
     </servlet-mapping>
-
 
 </web-app>

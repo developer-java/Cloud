@@ -14,10 +14,14 @@
         <rich:fileUpload id="#{fileUploadId}"
                          maxFilesQuantity="1"
                          immediateUpload="true"
+                         maxFileSize="0"
                          acceptedTypes="#{acceptedTypes}"
                          ontyperejected="showFileTypeRejectAlert('#{empty fileTypeRejectMsg ? '' : fileTypeRejectMsg}');"
                          onfilesubmit="showLoadingPnl();"
                          fileUploadListener="#{beanModel[fileUploadListenerMethod]}">
+            <f:facet name="label">
+                <h:outputText value="Загружено {_KB}KB из {KB}KB --- {mm}:{ss}" />
+            </f:facet>
             <a4j:ajax event="uploadcomplete" execute="@none" render="#{renderList}"/>
         </rich:fileUpload>
         <script type="text/javascript">

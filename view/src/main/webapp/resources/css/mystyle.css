@@ -5,9 +5,18 @@
 	background-repeat: repeat;
 
 }
+.leftPanel{
+	width: 35%;
+	height: 100%;
+	background-color: white;
+	box-shadow: 5px 5px 15px rgba(0,0,0,.5);
+	position: fixed;
+	top: 0;
+	left: -100%;
+}
 .main-header{
 	width: 100%;
-	height: 75px;
+	min-height: 75px;
 	background-color: #fff;
 	box-shadow: 5px 5px 15px rgba(0,0,0,.5);
 	border-bottom: 2px solid #fff;
@@ -19,7 +28,6 @@
 	font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
 	color: #0f0f0f;
 	margin-left: 16px;
-	border-right: 1px solid black;
 	padding-right: 16px;
 	height: 65px;
 	text-shadow: 1px 2px 5px rgba(0,0,0,.5);
@@ -27,7 +35,6 @@
 	line-height: 65px;
 }
 .main-header .fio{
-	text-shadow: 1px 1px 3px rgba(0,0,0,.5);
 	float: left;
 	font-size: 20px;
 	font-weight: 900;
@@ -206,13 +213,68 @@
 	background-color: #3c3c3c;
 	margin-right: 5px;
 }
-.leftPanel{
-	width: 35%;
-	height: 100%;
-	background-color: white;
-	box-shadow: 5px 5px 15px rgba(0,0,0,.5);
-	position: fixed;
-	top: 0;
-	left: -100%;
 
+@media screen and (max-width: 1920px){
+	.leftPanel{
+		width: 35%;
+	}
+}
+@media screen and (max-width: 1280px){
+	.fileItem{
+		width: 24%;
+	}
+	.leftPanel{
+		width: 50%;
+	}
+}
+@media screen and (max-width: 780px){
+	.fileItem{
+		width: 32%;
+	}
+	.leftPanel{
+		width: 100%;
+	}
+	.headmenu {
+		height: 150px;
+		width: 100%;
+		display: block;
+	}
+	.headmenu li{
+		width: 100%;
+		display: block;
+	}
+}
+@media screen and (max-width: 480px){
+	.fileItem{
+		width: 49%;
+	}
+	.leftPanel{
+		width: 100%;
+	}
+	.headmenu {
+		height: 150px;
+		width: 100%;
+		display: block;
+	}
+	.headmenu li{
+		width: 100%;
+		display: block;
+	}
+}
+@media screen and (max-width: 240px){
+	.fileItem{
+		width: 100%;
+	}
+	.leftPanel{
+		width: 100%;
+	}
+	.headmenu {
+		height: 150px;
+		width: 100%;
+		display: block;
+	}
+	.headmenu li{
+		width: 100%;
+		display: block;
+	}
 }

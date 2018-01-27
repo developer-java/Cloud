@@ -8,7 +8,7 @@ import java.io.File;
 public class Utils {
 
     public static String getImagePath(DicFile file){
-        String image = FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath() + "/res/img/";
+        String image = FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath() + "/resources/img/";
         if(file==null){
             return null;
         }

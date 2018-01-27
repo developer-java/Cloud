@@ -25,7 +25,7 @@ public class FileManagment {
         return res.get(0);
     }
     public String getUidByPath(String path){
-        List<String> res = em.createQuery("SELECT f.uid FROM DicFile f where f.path = :path")
+            List<String> res = em.createQuery("SELECT f.uid FROM DicFile f where f.path = :path")
                 .setParameter("path",path)
                 .getResultList();
         if(res==null || res.isEmpty()){

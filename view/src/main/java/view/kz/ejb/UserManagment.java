@@ -23,6 +23,9 @@ public class UserManagment {
         }
         return null;
     }
+    public SystemUser updateUser(SystemUser user){
+        return em.merge(user);
+    }
 
     public void saveUser(SystemUser user){
         em.persist(user);

@@ -30,10 +30,7 @@ public class RedirectModel {
     }
     public void goToMainPage() throws IOException {
         if(getParentUserModule().getParentUser()==null){
-            String s = FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath();
-            String s1 = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            System.out.println(s + "  "+ s1);
-            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath());
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/");
         }
     }
 

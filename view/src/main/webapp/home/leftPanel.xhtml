@@ -9,9 +9,11 @@
             <div class="container">
                 <div class="row">
                     <div style="width: 100%; position: absolute; padding-left: 32px; padding-top: 5px; padding-right: 5px;">
-                        <a href="#"><div onclick="hideLeftPanel();" style="padding: 16px;float: right; color: #000; font-size: 16px; padding: 15px; background-image: url(#{facesContext.externalContext.requestContextPath}/res/img/close.png); background-size: 100% 100%;"></div></a>
+                        <a href="#"><div onclick="hideLeftPanel();" style="padding: 16px;float: right; color: #000; font-size: 16px; padding: 15px; background-image: url(#{facesContext.externalContext.requestContextPath}/resources/img/close.png); background-size: 100% 100%;"></div></a>
                         <img src="#{applicationModel.getImagePath(applicationModel.selectedFile)}" alt="" style="margin-top: 50px" width="150px" height="150px"/>
-                        <h1>#{applicationModel.selectedFile.fileName}</h1>
+                        <h:inputTextarea value="#{applicationModel.selectedFile.fileName}" style="width: 100%; font-size: 48px; background: none; border: none;">
+                            <a4j:ajax event="change" listener="#{applicationModel.rename}"/>
+                        </h:inputTextarea>
                         <h4>Формат файла: #{applicationModel.selectedFile.fileFormat}</h4>
                         <h4>Размер файла: #{applicationModel.selectedFile.getFileSize()}</h4>
                         <h4>Дата создание: #{applicationModel.selectedFile.createdTime}</h4>
