@@ -11,6 +11,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Entity
 @Table(name = "FILES")
@@ -27,6 +28,26 @@ public class DicFile extends Identifier {
     private SystemUser user;
     @Transient
     private boolean isSelected;
+    @Column(name = "BASKET_FILE")
+    private boolean isBasket;
+    @Column(name = "CREATED")
+    private Date create;
+
+    public Date getCreate() {
+        return create;
+    }
+
+    public void setCreate(Date create) {
+        this.create = create;
+    }
+
+    public boolean isBasket() {
+        return isBasket;
+    }
+
+    public void setBasket(boolean idBasket) {
+        this.isBasket = idBasket;
+    }
 
     public boolean isSelected() {
         return isSelected;

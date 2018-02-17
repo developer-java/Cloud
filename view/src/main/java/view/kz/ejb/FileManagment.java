@@ -33,4 +33,10 @@ public class FileManagment {
         }
         return res.get(0);
     }
+    public List<DicFile> getBasketFiles(){
+        return em.createQuery("SELECT df FROM DicFile df WHERE df.isBasket = 1").getResultList();
+    }
+    public void delete(DicFile dicFile){
+        em.remove(dicFile);
+    }
 }

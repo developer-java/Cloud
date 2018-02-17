@@ -9,6 +9,7 @@ import view.kz.persistence.SystemUser;
 import view.kz.persistence.types.UserType;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -29,8 +30,17 @@ public class RegistrationModel {
     private DicManagment dicManagment;
     @EJB
     private UserManagment userManagment;
+    private String pass2;
     @ManagedProperty(value = "#{parentUserModule}")
     ParentUserModule parentUserModule;
+
+    public String getPass2() {
+        return pass2;
+    }
+
+    public void setPass2(String pass2) {
+        this.pass2 = pass2;
+    }
 
     public view.kz.web.ParentUserModule getParentUserModule() {
         return parentUserModule;
@@ -59,19 +69,24 @@ public class RegistrationModel {
     }
 
     public void registration() throws IOException {
-        getUser().setUid(UUID.randomUUID().toString());
-        getUser().setCity(selectedCity);
-        getUser().setParrentDir(settingManagment.getValueByParam("parentPath") + "\\"+getUser().getUid()+"\\");
-        getUser().setType(UserType.DEMO);
-        File file = new File(getUser().getParrentDir());
-        File basket = new File(getUser().getParrentDir()+"\\basket");
-        if(!file.exists()){
-            file.mkdirs();
-            basket.mkdirs();
+        if(getUser().getPassword().equals(getPass2())){
+            getUser().setUid(UUID.randomUUID().toString());
+            getUser().setCity(selectedCity);
+            getUser().setParrentDir(settingManagment.getValueByParam("parentPath") + "\\"+getUser().getUid()+"\\");
+            getUser().setType(UserType.DEMO);
+            File file = new File(getUser().getParrentDir());
+            File basket = new File(getUser().getParrentDir()+"\\basket");
+            if(!file.exists()){
+                file.mkdirs();
+                basket.mkdirs();
+            }
+            userManagment.saveUser(getUser());
+            getParentUserModule().setParentUser(getUser());
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()+"/home/index.xhtml?faces-redirect=true");
+        }else{
+            FacesContext.getCurrentInstance().addMessage("mainForm:pass2", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Парольи не совпадают", null));
+            return;
         }
-        userManagment.saveUser(getUser());
-        getParentUserModule().setParentUser(getUser());
-        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()+"/home/index.xhtml?faces-redirect=true");
     }
 
     public void listenerContry(){

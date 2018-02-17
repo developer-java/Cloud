@@ -41,19 +41,18 @@
 	font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
 	color: #0f0f0f;
 	margin-left: 16px;
-	padding-right: 16px;
 	height: 65px;
-	margin-top: 5px;
+	margin-top: 10px;
 	line-height: 65px;
 }
 .main-header .items{
 	float: right;
-	margin-right: 50px;
 	height: 75px;
 	line-height: 75px;
 }
 .main-header .items ul{
 	height: 75px;
+	padding: 0;
 }
 .main-header .items ul li{
 	height: 75px;
@@ -277,4 +276,25 @@
 		width: 100%;
 		display: block;
 	}
+}
+
+.line{
+	width: 100%;
+	height: 50px;
+	display: inline-block;
+	border-bottom: 2px solid #ccc;
+	margin: 0;
+	padding: 0;
+}
+.line .item-line{
+	width: auto;
+	max-width: 20%;
+	text-align: left;
+	float: left;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	line-height: 50px;
+	font-size: 18px;
+	font-weight: bold;
 }

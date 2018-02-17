@@ -10,6 +10,11 @@
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
+        <multipart-config>
+            <max-file-size>99999999999999</max-file-size>
+            <max-request-size>99999999999999</max-request-size>
+            <file-size-threshold>5242880</file-size-threshold>
+        </multipart-config>
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
@@ -23,8 +28,20 @@
         <param-value>database/root.xml</param-value>
     </context-param>
     <context-param>
+        <param-name>org.richfaces.fileUpload.maxRequestSize</param-name>
+        <param-value>99999999999999</param-value>
+    </context-param>
+    <context-param>
+        <param-name>org.richfaces.fileUpload.createTempFiles</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
         <param-name>liquibase.datasource</param-name>
         <param-value>java:/template</param-value>
+    </context-param>
+    <context-param>
+        <param-name>org.richfaces.skin</param-name>
+        <param-value>#{skinBean.skin}</param-value>
     </context-param>
     <context-param>
         <param-name>liquibase.host.excludes</param-name>
@@ -52,4 +69,20 @@
         <url-pattern>/download</url-pattern>
     </servlet-mapping>
 
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>SSL</web-resource-name>
+            <url-pattern>/</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>uma_authorization</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <security-role>
+        <description>Role name provided by SSL server</description>
+        <role-name>uma_authorization</role-name>
+    </security-role>
 </web-app>

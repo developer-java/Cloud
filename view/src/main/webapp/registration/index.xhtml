@@ -72,6 +72,12 @@
                         </p>
 
                         <p>
+                            <label class="text_label">Введите пароль еще раз</label>
+                            <rich:message for="pass" ajaxRendered="true"/>
+                            <h:inputSecret value="#{registrationModel.user.password}" id="pass2" required="true" styleClass="form-control"/>
+                        </p>
+
+                        <p>
                             <a class="btn btn-success" onclick="goNext(); return false;">Зарегистрироваться</a>
                             <a4j:jsFunction name="goNext" action="#{registrationModel.registration()}" execute="@form"/>
                         </p>

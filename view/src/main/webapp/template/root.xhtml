@@ -32,7 +32,7 @@
                 <div class="main-header">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-lg-4 col-xs-12 col">
+                            <div class="col-lg-6 col-sm-12 col-md-12 col-xs-12 col">
                                 <center>
                                     <a href="/">
                                         <img src="#{facesContext.externalContext.requestContextPath}/resources/img/o.png" height="50px"
@@ -41,25 +41,23 @@
                                         Облако
                                     </span>
                                     </a>
-                                </center>
-                            </div>
-                            <div class="col-lg-4 col-xs-12 col">
-                                <a href="#{facesContext.externalContext.requestContextPath}/home/setting.xhtml">
+                                    <a href="#{facesContext.externalContext.requestContextPath}/home/setting.xhtml">
                                     <span class="fio">
                                         <ui:fragment rendered="#{not empty parentUserModule.parentUser.id}">
                                             #{parentUserModule.parentUser.lastname} #{parentUserModule.parentUser.firstname}
                                         </ui:fragment>
                                     </span>
-                                </a>
+                                    </a>
+                                </center>
                             </div>
-                            <div class="col-lg-4 col-xs-12 col">
+                            <div class="col-lg-6 col-sm-12 col-md-12 col-xs-12 col">
                                 <ui:fragment rendered="#{not empty parentUserModule.parentUser.id}">
                                     <nav class="items">
                                         <ul class="headmenu">
                                             <li style="width: 200px; padding-left: 5px; margin-right:16px;padding-right: 5px;">
                                                 <h:inputText value="#{applicationModel.search.unicalCode}" style="height: 35px; padding-left:5px;background: none; width: 200px; border-radius: 5px;" a:placeholder="Поиск" onchange="search(); return false;"/>
                                                 <a4j:region>
-                                                    <a4j:jsFunction name="search" action="#{applicationModel.search.goToSearchresourcesult()}"/>
+                                                    <a4j:jsFunction name="search" action="#{applicationModel.search.goToSearchResult()}"/>
                                                 </a4j:region>
                                             </li>
                                             <li>

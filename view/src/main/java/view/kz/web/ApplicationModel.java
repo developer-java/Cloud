@@ -18,11 +18,9 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.*;
-import java.nio.Buffer;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @ManagedBean
 @SessionScoped
@@ -60,6 +58,24 @@ public class ApplicationModel {
             search = new Search();
         }
         return search;
+    }
+
+    public List<String> topPathPanelList(){
+        String[] top = getCurrentPath().split("\\\\");
+        List<String> topList = new ArrayList<>();
+        topList.add(" Облако / ");
+        boolean checked = true;
+        for(int i=0;i<top.length;i++){
+            if (checked){
+                if(top[i].equals("USERFILES")){
+                    i++;
+                    checked = false;
+                }
+            }else{
+                topList.add(Utils.handleFilename(" "+top[i])+" / ");
+            }
+        }
+        return topList;
     }
 
     public void rename() throws IOException {
@@ -141,6 +157,7 @@ public class ApplicationModel {
                 DicFile file = new DicFile();
                 file.setUser(getParentUserModule().getParentUser());
                 file.setPath(newFile.getPath());
+                file.setCreate(new Date());
                 file.setUid(UUID.randomUUID().toString().replace("-",""));
                 getFileManagment().addFile(file);
                 isFileSizeError = false;
@@ -225,17 +242,30 @@ public class ApplicationModel {
 
     public void delete() throws IOException {
         for(DicFile file : parentFiles){
-            if(file.isSelected()){
-                File f = new File(parentUserModule.getParentUser().getParrentDir()+"\\basket\\"+file.getFile().getName());
-                if(!f.exists()){ f.createNewFile();}
-                FileOutputStream fos = new FileOutputStream(f);
-                fos.write(Files.readAllBytes(file.getFile().toPath()));
-                fos.flush();
-                fos.close();
-                file.getFile().delete();
+            if(file.getFile().isDirectory()){
+
+            }else{
+                if(file.isSelected()){
+                    File f = new File(parentUserModule.getParentUser().getParrentDir()+"\\basket\\"+file.getFile().getName());
+                    if(!f.exists()){ f.createNewFile();}
+                    FileOutputStream fos = new FileOutputStream(f);
+                    fos.write(Files.readAllBytes(file.getFile().toPath()));
+                    fos.flush();
+                    fos.close();
+                    DicFile df = new DicFile();
+                    df.setFile(f);
+                    df.setCreate(new Date());
+                    df.setBasket(true);
+                    df.setUid(UUID.randomUUID().toString().replace("-",""));
+                    df.setPath(f.getPath());
+                    fileManagment.addFile(df);
+                    file.getFile().delete();
+                }
             }
+
         }
     }
+
     public void deleteSelectedFile(File file) throws IOException {
         File f = new File(parentUserModule.getParentUser().getParrentDir()+"\\basket\\"+file.getName());
         if(!f.exists()){ f.createNewFile();}
@@ -243,6 +273,13 @@ public class ApplicationModel {
         fos.write(Files.readAllBytes(file.toPath()));
         fos.flush();
         fos.close();
+        DicFile df = new DicFile();
+        df.setFile(f);
+        df.setCreate(new Date());
+        df.setBasket(true);
+        df.setUid(UUID.randomUUID().toString().replace("-",""));
+        df.setPath(f.getPath());
+        fileManagment.addFile(df);
         file.delete();
     }
 
@@ -259,7 +296,7 @@ public class ApplicationModel {
     }
 
     public String getImagePath(DicFile file){
-        return Utils.getImagePath(file);
+        return getImagePathMethod(file);
     }
 
     public String handleFileName(File file){
@@ -291,6 +328,9 @@ public class ApplicationModel {
     public long getFileSizeByFolder(File file){
         long size = 0;
         for(File f : file.listFiles()){
+            if(f.getPath().replace("\\","").equals((getParentUserModule().getParentUser().getParrentDir()+"basket").replace("\\",""))){
+                continue;
+            }
             if(f.isFile()){
                 size+=f.length();
             }else{
@@ -392,7 +432,7 @@ public class ApplicationModel {
         }
 
         public void goToSearchResult() throws IOException {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "search.xhtml?faces-redirect=true");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "  search.xhtml?faces-redirect=true");
         }
     }
 
@@ -482,6 +522,143 @@ public class ApplicationModel {
            getParentUserModule().setParentUser(managment.updateUser(user));
             FacesContext.getCurrentInstance().addMessage("mainPass:savepass", new FacesMessage(FacesMessage.SEVERITY_INFO, "Пароль успешно изменен!", null));
             return;
+        }
+    }
+
+    public String getImagePathMethod(DicFile file){
+        String image = FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath() + "/resources/img/";
+        String link  = "http://localhost/download?uid=";
+        if(file==null){
+            return null;
+        }
+        if(file.getFile().isFile()){
+            if(file.getFileFormat().equals("jpg")){
+                image+="jpg.png";
+                link+=fileManagment.getUidByPath(file.getFile().getPath());
+                return link;
+            }else if(file.getFileFormat().equals("png")){
+                image+="png.png";
+                link+=fileManagment.getUidByPath(file.getFile().getPath());
+                return link;
+            }
+            else if(file.getFileFormat().equals("pdf")){
+                image+="pdf.png";
+            }
+            else if(file.getFileFormat().equals("zip")){
+                image+="zip.png";
+            }
+            else if(file.getFileFormat().equals("xls")){
+                image+="xls.png";
+            }
+            else if(file.getFileFormat().equals("gif")){
+                image+="gif.png";
+            }
+            else if(file.getFileFormat().equals("rar")){
+                image+="rar.png";
+            }
+            else if (file.getFileFormat().equals("wav")){
+                image+="wav.png";
+            }
+            else if (file.getFileFormat().equals("wmv")){
+                image+="wmv.png";
+            }
+            else if (file.getFileFormat().equals("proj")){
+                image+="proj.png";
+            }
+            else if (file.getFileFormat().equals("rtf")){
+                image+="rtf.png";
+            }
+            else if(file.getFileFormat().equals("exe")){
+                image+="exe.png";
+            }
+            else if(file.getFileFormat().equals("apk")){
+                image+="apk.png";
+            }
+            else if(file.getFileFormat().equals("doc") || file.getFileFormat().equals("docx")){
+                image+="office.png";
+            }
+            else if(file.getFileFormat().equals("txt")){
+                image+="text.png";
+            }
+            else if(file.getFileFormat().equals("jar") || file.getFileFormat().equals("java") ){
+                image+="java.png";
+            }
+            else if(file.getFileFormat().equals("ini")){
+                image+="conf.jpg";
+            }
+            else if(file.getFileFormat().equals("html")||file.getFileFormat().equals("xhtml")||file.getFileFormat().equals("php")){
+                image+="web.png";
+            }
+            else if(file.getFileFormat().equals("css")){
+                image+="css.png";
+            }
+            else{
+                image+="file.png";
+            }
+        }else{
+            image+="folder.png";
+        }
+        return image;
+    }
+    private EditTextModel editTextModel;
+
+    public EditTextModel getEditTextModel() {
+        if(editTextModel==null){
+            editTextModel = new EditTextModel();
+        }
+        return editTextModel;
+    }
+
+    public class EditTextModel{
+        private String text;
+        private String charset = "UTF-8"; // UTF-8, CP-1251
+
+        public boolean editable(){
+            if(selectedFile!=null){
+                if(selectedFile.getFileFormat().equals("txt")||
+                        selectedFile.getFileFormat().equals("ask") ||
+                        selectedFile.getFileFormat().equals("ini") ||
+                        selectedFile.getFileFormat().equals("cfg") ||
+                        selectedFile.getFileFormat().equals("php") ||
+                        selectedFile.getFileFormat().equals("xhtml") ||
+                        selectedFile.getFileFormat().equals("java") ||
+                        selectedFile.getFileFormat().equals("c++") ||
+                        selectedFile.getFileFormat().equals("cs") ||
+                        selectedFile.getFileFormat().equals("pass") ||
+                        selectedFile.getFileFormat().equals("html")){
+                    return true;
+                }
+            }
+            return false;
+        }
+        public String getText() throws IOException {
+            if(text==null && editable()){
+                if(selectedFile == null || selectedFile.getFile()==null){
+                    return "";
+                }else{
+                     List<String> lines = Files.readAllLines(selectedFile.getFile().toPath(), Charset.forName(charset));
+                    StringBuilder sb = new StringBuilder();
+                    for(String s : lines){
+                        sb.append(s);
+                        sb.append("\n");
+                    }
+                    text = sb.toString();
+                }
+            }
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+        public void clear(){
+            text=null;
+        }
+        public void save() throws IOException {
+            FileWriter fw = new FileWriter(selectedFile.getFile());
+            fw.write(text);
+            fw.flush();
+            fw.close();
         }
     }
 }
