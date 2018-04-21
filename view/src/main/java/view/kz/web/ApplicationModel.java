@@ -19,6 +19,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.util.*;
 
@@ -61,11 +62,11 @@ public class ApplicationModel {
     }
 
     public List<String> topPathPanelList(){
-        String[] top = getCurrentPath().split("\\\\");
+        String[] top = getCurrentPath().replace("\\\\","#").split("#");
         List<String> topList = new ArrayList<>();
         topList.add(" Облако / ");
         boolean checked = true;
-        for(int i=0;i<top.length;i++){
+        for(int i=1;i<top.length;i++){
             if (checked){
                 if(top[i].equals("USERFILES")){
                     i++;
@@ -149,7 +150,7 @@ public class ApplicationModel {
         File newFile = new File(getCurrentPath()+"/"+checkFileName(new File(getCurrentPath()),item.getName()));
         if(item.getData().length>getSizeFree(false)){
             isFileSizeError = true;
-            FacesContext.getCurrentInstance().addMessage("main:loadBtn", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Не достаточно памяти", null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Не достаточно памяти", null));
             return;
         }
         if(!newFile.exists()){
@@ -527,7 +528,7 @@ public class ApplicationModel {
 
     public String getImagePathMethod(DicFile file){
         String image = FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath() + "/resources/img/";
-        String link  = "http://localhost/download?uid=";
+        String link  = "/download?uid=";
         if(file==null){
             return null;
         }
@@ -636,7 +637,13 @@ public class ApplicationModel {
                 if(selectedFile == null || selectedFile.getFile()==null){
                     return "";
                 }else{
-                     List<String> lines = Files.readAllLines(selectedFile.getFile().toPath(), Charset.forName(charset));
+                    List<String> lines = null;
+                    try {
+                        lines = Files.readAllLines(selectedFile.getFile().toPath(), Charset.forName(charset));
+                    }catch (MalformedInputException ex){
+                        ex.printStackTrace();
+                        return "";
+                    }
                     StringBuilder sb = new StringBuilder();
                     for(String s : lines){
                         sb.append(s);

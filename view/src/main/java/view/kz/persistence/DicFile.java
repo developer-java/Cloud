@@ -20,7 +20,7 @@ public class DicFile extends Identifier {
     private String fileName;
     @Column(name = "PATH")
     private String path;
-    @Column(name = "UID")
+    @Column(name = "UID",unique = true)
     private String uid;
     @XmlTransient
     @ManyToOne

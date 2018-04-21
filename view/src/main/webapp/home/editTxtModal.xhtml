@@ -1,0 +1,121 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <style>
+        .wp{
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            padding-bottom: 64px;
+            height: 100%;
+            display: none;
+            background-color: rgba(0,0,0,.5);
+            -webkit-transition: all 1s;
+            -moz-transition: all 1s;
+            -ms-transition: all 1s;
+            -o-transition: all 1s;
+            transition: all 1s;
+        }
+        .editModal{
+            margin: 0;
+            padding: 0;
+            width: 98%;
+            height: 100%;
+            margin-left: 1%;
+            display: inline-block;
+            margin-top: 1%;
+            background-color: white;
+            -webkit-transition: all 1s;
+            -moz-transition: all 1s;
+            -ms-transition: all 1s;
+            -o-transition: all 1s;
+            transition: all 1s;
+        }
+        .editor{
+            width: 100%;
+            height: 100%;
+            padding-bottom: 36px;
+            display: inline-block;
+        }
+        .btn-line{
+            width: 100%;
+            height: 50px;
+            display: inline-block;
+            position: relative;
+        }
+        .closed{
+            position: absolute;
+            right: 8px;
+            height: 50px;
+            text-decoration: none;
+            color: black;
+            line-height: 50px;
+        }
+        .menu{
+            height: 50px;
+            position: absolute;
+            left: 8px;
+            top: 0px;
+        }
+        ul.menu li{
+            height: 50px;
+            width: 100px;
+            float: left;
+            display: block;
+            line-height: 50px;
+            background-color: white;
+        }
+        ul.menu li:hover{
+            background-color: rgba(0,0,0,.1);
+        }
+        .lined{
+            background: url(http://i.imgur.com/2cOaJ.png);
+            background-attachment: local;
+            background-repeat: no-repeat;
+            padding-left: 35px;
+            padding-top: 10px;
+            border-color:#ccc;
+            background-color: white;
+        }
+    </style>
+    <f:event type="preRenderView" listener="#{applicationModel.editTextModel.clear()}"/>
+    <h:form id="editModal">
+        <div class="wp">
+            <a4j:outputPanel id="editTxtPanel" ajaxRendered="true" styleClass="editModal">
+                <div class="btn-line">
+                    <a class="closed" onclick="hideEditPanel()">Закрыть</a>
+                    <ul class="menu">
+                        <li onclick="save();">
+                            <center>Save</center>
+                        </li>
+                        <li onclick="hideEditPanel()"><center>Cancel</center></li>
+                    </ul>
+                </div>
+                <h:inputTextarea styleClass="editor lined" rows="50" id="mytextarea" value="#{applicationModel.editTextModel.text}"/>
+                <script>
+                    $(function() {
+                        $(".lined").linedtextarea(
+                            {selectedLine: 1}
+                        );
+                        $("#mytextarea").linedtextarea();
+
+                    });
+                </script>
+                <a4j:jsFunction name="save" action="#{applicationModel.editTextModel.save()}" oncomplete="hideEditPanel()" execute="@form"/>
+            </a4j:outputPanel>
+        </div>
+    </h:form>
+    <script>
+        var showing = false;
+        function showEditPanel() {
+            $(".wp").css("display","block");
+        }
+        function hideEditPanel() {
+            $(".wp").css("display","none");
+        }
+    </script>
+</ui:composition>

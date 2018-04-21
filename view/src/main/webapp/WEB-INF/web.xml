@@ -69,20 +69,20 @@
         <url-pattern>/download</url-pattern>
     </servlet-mapping>
 
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>SSL</web-resource-name>
-            <url-pattern>/</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>uma_authorization</role-name>
-        </auth-constraint>
-        <user-data-constraint>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
-    </security-constraint>
-    <security-role>
-        <description>Role name provided by SSL server</description>
-        <role-name>uma_authorization</role-name>
-    </security-role>
+    <!--<security-constraint>-->
+        <!--<web-resource-collection>-->
+            <!--<web-resource-name>SSL</web-resource-name>-->
+            <!--<url-pattern>/</url-pattern>-->
+        <!--</web-resource-collection>-->
+        <!--<auth-constraint>-->
+            <!--<role-name>uma_authorization</role-name>-->
+        <!--</auth-constraint>-->
+        <!--<user-data-constraint>-->
+            <!--<transport-guarantee>CONFIDENTIAL</transport-guarantee>-->
+        <!--</user-data-constraint>-->
+    <!--</security-constraint>-->
+    <!--<security-role>-->
+        <!--<description>Role name provided by SSL server</description>-->
+        <!--<role-name>uma_authorization</role-name>-->
+    <!--</security-role>-->
 </web-app>
