@@ -17,7 +17,7 @@
                         <h4>Формат файла: #{applicationModel.selectedFile.fileFormat}</h4>
                         <h4>Размер файла: #{applicationModel.selectedFile.getFileSize()}</h4>
                         <h4>Дата создание: #{applicationModel.selectedFile.createdTime}</h4>
-                        <h4>Ссылка на файл: <a>http://localhost:8080/download?uid=#{applicationModel.getUidByPath(applicationModel.selectedFile.file.path)}</a></h4>
+                        <h4>Ссылка на файл: <a>http://localhost/download?uid=#{applicationModel.getUidByPath(applicationModel.selectedFile.file.path)}</a></h4>
                         <a4j:commandButton type="button" class="btn btn-success" onclick="$('#download').click();" value="Скачать"/>
                         <a4j:commandButton rendered="#{applicationModel.editTextModel.editable()}" type="button" class="btn btn-success" onclick="showEditPanel();" render="editTxtPanel" value="Редактьировать"/>
                         <a4j:commandButton styleClass="btn btn-warning" action="#{applicationModel.deleteSelectedFile(applicationModel.selectedFile.file)}" render="filesPanel" oncomplete="hideLeftPanel();" value="Удалить"/>
