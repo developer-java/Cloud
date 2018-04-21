@@ -35,19 +35,18 @@
                             <div class="col-lg-6 col-sm-12 col-md-12 col-xs-12 col">
                                 <center>
                                     <a href="/">
-                                        <img src="#{facesContext.externalContext.requestContextPath}/resources/img/o.png" height="50px"
+                                        <img src="#{facesContext.externalContext.requestContextPath}/resources/img/o.png"
+                                             height="50px"
                                              width="75px" style="margin-top: 12px; margin-left: 50px;float: left;"/>
                                         <span class="brand">
                                         Облако
                                     </span>
                                     </a>
-                                    <a href="#{facesContext.externalContext.requestContextPath}/home/setting.xhtml">
-                                    <span class="fio">
-                                        <ui:fragment rendered="#{not empty parentUserModule.parentUser.id}">
-                                            #{parentUserModule.parentUser.lastname} #{parentUserModule.parentUser.firstname}
-                                        </ui:fragment>
-                                    </span>
-                                    </a>
+                                    <ui:fragment rendered="#{not empty parentUserModule.parentUser}">
+                                        <a style="height: 70px; line-height: 70px" href="#{facesContext.externalContext.requestContextPath}/home/setting.xhtml">
+                                            <img style="float: left; margin-top: 25px;" src="#{facesContext.externalContext.requestContextPath}/resources/img/setting.png" width="30px" height="30px"/>
+                                        </a>
+                                    </ui:fragment>
                                 </center>
                             </div>
                             <div class="col-lg-6 col-sm-12 col-md-12 col-xs-12 col">
@@ -55,13 +54,17 @@
                                     <nav class="items">
                                         <ul class="headmenu">
                                             <li style="width: 200px; padding-left: 5px; margin-right:16px;padding-right: 5px;">
-                                                <h:inputText value="#{applicationModel.search.unicalCode}" style="height: 35px; padding-left:5px;background: none; width: 200px; border-radius: 5px;" a:placeholder="Поиск" onchange="search(); return false;"/>
+                                                <h:inputText value="#{applicationModel.search.unicalCode}"
+                                                             style="height: 35px; padding-left:5px;background: none; width: 200px; border-radius: 5px;"
+                                                             a:placeholder="Поиск" onchange="search(); return false;"/>
                                                 <a4j:region>
-                                                    <a4j:jsFunction name="search" action="#{applicationModel.search.goToSearchResult()}"/>
+                                                    <a4j:jsFunction name="search"
+                                                                    action="#{applicationModel.search.goToSearchResult()}"/>
                                                 </a4j:region>
                                             </li>
                                             <li>
-                                                <h:outputLink value="#{facesContext.externalContext.requestContextPath}/home/basket.xhtml">
+                                                <h:outputLink
+                                                        value="#{facesContext.externalContext.requestContextPath}/home/basket.xhtml">
                                                     Корзина
                                                 </h:outputLink>
                                             </li>
@@ -84,8 +87,10 @@
         </header>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <ui:insert name="content"/>
-        <script type="javascript" src="#{facesContext.externalContext.requestContextPath}/resources/javascripts/jquery.js"/>
-        <script type="javascript" src="#{facesContext.externalContext.requestContextPath}/resources/javascripts/home.js"/>
+        <script type="javascript"
+                src="#{facesContext.externalContext.requestContextPath}/resources/javascripts/jquery.js"/>
+        <script type="javascript"
+                src="#{facesContext.externalContext.requestContextPath}/resources/javascripts/home.js"/>
         <ui:insert name="scripts"/>
     </h:body>
 </f:view>

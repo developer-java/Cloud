@@ -60,7 +60,7 @@
 	line-height: 75px;
 	display: inline-block;
 }
-.main-header .items ul li a{
+.mytext,.main-header .items ul li a{
 	padding-left: 5px;
 	display: block;
 	text-shadow: 1px 1px 3px rgba(0,0,0,.5);
@@ -204,6 +204,9 @@
 	background-color: #3c3c3c;
 	margin-right: 5px;
 }
+.memory{
+	display: block;
+}
 .commandLine .delete-btn{
 	border: none;
 	background: none;
@@ -217,10 +220,16 @@
 	.leftPanel{
 		width: 35%;
 	}
+	.memory{
+		display: block;
+	}
 }
 @media screen and (max-width: 1280px){
 	.fileItem{
 		width: 24%;
+	}
+	.memory{
+		display: block;
 	}
 	.leftPanel{
 		width: 50%;
@@ -242,6 +251,9 @@
 		width: 100%;
 		display: block;
 	}
+	.memory{
+		display: none;
+	}
 }
 @media screen and (max-width: 480px){
 	.fileItem{
@@ -259,6 +271,9 @@
 		width: 100%;
 		display: block;
 	}
+	.memory{
+		display: none;
+	}
 }
 @media screen and (max-width: 240px){
 	.fileItem{
@@ -275,6 +290,9 @@
 	.headmenu li{
 		width: 100%;
 		display: block;
+	}
+	.memory{
+		display: none;
 	}
 }
 
